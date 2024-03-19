@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+All Artciles
+{% endblock title %}
+
+{% block css_files %}
+<link rel='stylesheet' href="{% static 'blog/post.css' %}">
+<link rel='stylesheet' href="{% static 'blog/all_posts.css' %}">
+{% endblock css_files %}
+
+
+{% block content %}
+
+{% for article in articles %}
+    <ul>
+        {% include "blog/includes/post.html"%}
+    </ul>
+{% endfor %}
+{% endblock content %}

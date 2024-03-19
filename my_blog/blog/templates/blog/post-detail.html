@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Article Detail
+{% endblock title %}
+
+{% block css_files %}
+<link rel='stylesheet' href="{% static 'blog/post_detail.css' %}">
+{% endblock css_files %}
+
+
+{% block content %}
+
+{% if form.errors %} 
+<div id="alert">
+    <h2> Saving the comment failed<h2/>
+    <p>Please check the comment form below and fix youre errors</p>
+    <a href="#comment-form">Fix!</a>
+</div>
+{% endif %}
+<section id="summary">
+    <h2>{{article.title}}</h2>
+    <div>
+        {% for rate in rating %}
+            <span>{{ rate.caption}}<span/>
+        {% endfor %}
+    </div>
+    <div id="read-later">
+        <form action="{% url "save-article" %}" method="POST">
+            {% csrf_token %}
+           
+            <input type="hidden" value="{{article.id}}" name="article_id">
+            {% if is_saved %}
+            <button>
+                Remove read later
+            </button>
+            {% else %}
+            <button>
+                Read Later
+            </button>
+            {% endif %}
+        </form>
+        
+    </div>
+<article>
+    <img src="{{article.image_name.url}}" alt="{{article.title}}">
+    <address> By <a href="mailto:{{article.author.email_address}}">{{ article.author }}</a>
+        
+    </address>
+    <div>
+        Last Upated on <time>{{article.date|date:"d M Y"}}</time>
+    </div>
+</article>
+</section>
+
+
+<main>
+
+<p>
+    {{article.content|linebreaks}}
+</p>
+</main>
+
+<section id="comments">
+    <ul>
+        {% for thought in thoughts %}
+        <li>
+            <h2>
+                {{thought.user}}
+                <p>{{thought.text|linebreaks}}</p>
+            </h2>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section id="comment-form">
+    
+        <form action="{% url 'post-detail-page' article.slug %}" method="POST">
+            {% csrf_token %}
+            {% for form_field  in form %}
+            <div class="form-control {% if form_field.errors %}invalid{% endif %}">
+                {{form_field.label_tag}}
+                {{form_field}}
+                {{form_field.errors}}
+            </div>
+            {% endfor %}
+            <button> Submit</button>
+        </form>
+   
+</section>
+
+{% endblock content %}

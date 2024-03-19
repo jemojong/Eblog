@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+ Saved Articles
+{% endblock title %}
+
+{% block css_files %}
+<link rel='stylesheet' href="{% static 'blog/post_detail.css' %}">
+{% endblock css_files %}
+
+
+{% block content %}
+
+    
+        <section id="summary">
+            {% if has_article %}
+            {% for article in articles %}
+            <ul>
+                <li> <a href="{% url "post-detail-page" article.slug %}">{{ article.title}}<a/></li>
+            </ul>
+           
+            {% endfor %}
+
+            {% else %}
+            <p> No Saved Article<p/>
+                {% endif %}
+        </section>
+   
+
+
+    
+{% endblock content %}
